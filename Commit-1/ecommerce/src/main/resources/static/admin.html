@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Paneli</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header>
+    <h1>Admin Paneli</h1>
+    <nav>
+        <a href="index.html">Ana Sayfa</a>
+        <a href="login.html">Çıkış</a>
+    </nav>
+</header>
+
+<main>
+    <section>
+        <h2>Yeni Ürün Ekle / Güncelle</h2>
+        <form id="product-form">
+            <input type="hidden" id="product-id" />
+            <input type="text" id="name" placeholder="Ürün Adı" required />
+            <input type="text" id="description" placeholder="Açıklama" />
+            <input type="number" id="price" placeholder="Fiyat" required />
+            <select id="category-select" required></select>
+            <button type="submit">Kaydet</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Ürün Listesi</h2>
+        <div id="admin-product-list" class="grid"></div>
+    </section>
+
+    <section>
+        <h2>Kategori Yönetimi</h2>
+        <form id="category-form">
+            <input type="text" id="category-name" placeholder="Yeni kategori adı" required />
+            <button type="submit">Ekle</button>
+        </form>
+        <ul id="category-list"></ul>
+    </section>
+
+    <div id="message" class="message"></div>
+</main>
+
+<script>
+    (function() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // Token yoksa login sayfasına gönder
+        window.location.href = "login.html";
+        return;
+      }
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (!payload.roles || !payload.roles.includes("ROLE_ADMIN")) {
+          // Admin değilse ana sayfaya gönder
+          window.location.href = "index.html";
+        }
+      } catch (e) {
+        // Token bozuksa login'e yönlendir
+        window.location.href = "login.html";
+      }
+    })();
+</script>
+
+
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

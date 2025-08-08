@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header>
+    <h1>Kayıt Ol</h1>
+    <nav>
+        <a href="index.html">Ana Sayfa</a>
+    </nav>
+</header>
+
+<main>
+    <form id="register-form">
+        <input type="text" id="name" placeholder="Ad Soyad" required />
+        <input type="text" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Şifre" required />
+        <button type="submit">Kayıt Ol</button>
+    </form>
+    <p>Zaten hesabınız var mı? <a href="login.html">Giriş yapın</a></p>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
