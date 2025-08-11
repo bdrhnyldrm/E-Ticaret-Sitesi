@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/ecommerce/src/main/resources/static/css/styles.css">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/ecommerce/src/main/resources/static/css/styles.css" />
+              <option name="updatedContent" value="// ...existing code...&#10;&#10;button {&#10;  background-color: #007bff;&#10;  color: white;&#10;  border: none;&#10;  padding: 10px 18px;&#10;  border-radius: 4px;&#10;  cursor: pointer;&#10;  font-size: 1rem;&#10;  transition: background-color 0.2s ease;&#10;}&#10;&#10;button:hover {&#10;  background-color: #0056b3;&#10;}&#10;&#10;button:disabled {&#10;  background-color: #cccccc;&#10;  cursor: not-allowed;&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
