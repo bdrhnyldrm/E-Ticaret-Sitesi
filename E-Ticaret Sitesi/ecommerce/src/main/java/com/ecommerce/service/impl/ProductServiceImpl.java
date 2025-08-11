@@ -29,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .stock(request.getStock())
+                .imageUrl(request.getImageUrl())
                 .category(category)
                 .build();
 
@@ -37,19 +38,31 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Long id, ProductRequest request) {
-        Product existingProduct = productRepository.findById(id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ürün bulunamadı"));
 
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Kategori bulunamadı"));
+        if (request.getName() != null) {
+            product.setName(request.getName());
+        }
+        if (request.getDescription() != null) {
+            product.setDescription(request.getDescription());
+        }
+        if (request.getPrice() != null) {
+            product.setPrice(request.getPrice());
+        }
+        if (request.getStock() > 0) {
+            product.setStock(request.getStock());
+        }
+        if (request.getImageUrl() != null) {
+            product.setImageUrl(request.getImageUrl());
+        }
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new EntityNotFoundException("Kategori bulunamadı"));
+            product.setCategory(category);
+        }
 
-        existingProduct.setName(request.getName());
-        existingProduct.setDescription(request.getDescription());
-        existingProduct.setPrice(request.getPrice());
-        existingProduct.setStock(request.getStock());
-        existingProduct.setCategory(category);
-
-        return productRepository.save(existingProduct);
+        return productRepository.save(product);
     }
 
     @Override

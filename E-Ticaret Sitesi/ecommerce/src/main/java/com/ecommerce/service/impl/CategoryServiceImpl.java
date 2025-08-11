@@ -32,4 +32,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByName(name)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
+
+    @Override
+    public void deleteCategory(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            return; // veya NotFound exception fırlatabilirsiniz
+        }
+        categoryRepository.deleteById(id);
+    }
 }

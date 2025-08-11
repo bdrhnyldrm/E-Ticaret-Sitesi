@@ -15,4 +15,5 @@ public class ProductRequest {
     private BigDecimal price;
     private Long categoryId;
     private int stock;
+    private String imageUrl;
 }

@@ -1,9 +1,11 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.dto.ProductRequest;
+import com.ecommerce.dto.ProductResponse;
 import com.ecommerce.model.Product;
 import com.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,21 +18,21 @@ public class ProductController {
 
     private final ProductService productService;
 
-    // ✔️ Yeni ürün oluştur
+    // ✔️ Yeni ürün oluştur → DTO döndür
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest request) {
-        Product createdProduct = productService.createProduct(request);
-        return ResponseEntity.ok(createdProduct);
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest request) {
+        Product created = productService.createProduct(request);
+        return ResponseEntity.ok(ProductResponse.from(created));
     }
 
-    // ✔️ Ürün güncelle
+    // ✔️ Ürün güncelle → DTO döndür
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(
+    public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable Long id,
             @RequestBody ProductRequest request
     ) {
-        Product updatedProduct = productService.updateProduct(id, request);
-        return ResponseEntity.ok(updatedProduct);
+        Product updated = productService.updateProduct(id, request);
+        return ResponseEntity.ok(ProductResponse.from(updated));
     }
 
     // ✔️ Ürün sil
@@ -40,39 +42,63 @@ public class ProductController {
         return ResponseEntity.ok("Ürün silindi");
     }
 
-    // ✔️ Tüm ürünleri listele
+    // ✔️ Tüm ürünleri listele → her zaman LİSTE döner (DTO) + cache kapalı
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<List<ProductResponse>> getAll() {
+        List<Product> list = productService.getAllProducts();
+        List<ProductResponse> dto = list.stream()
+                .map(ProductResponse::from)
+                .toList();
+        return ResponseEntity
+                .ok()
+                .cacheControl(CacheControl.noStore())
+                .body(dto);
     }
 
-    // ✔️ ID'ye göre ürün getir
+    // ✔️ ID'ye göre ürün getir → DTO
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProductById(id));
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        Product p = productService.getProductById(id);
+        return ResponseEntity.ok(ProductResponse.from(p));
     }
 
-    // ✔️ Ada göre arama
+    // ✔️ Ada göre arama → DTO liste
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> searchByName(@RequestParam String name) {
-        return ResponseEntity.ok(productService.searchByName(name));
+    public ResponseEntity<List<ProductResponse>> searchByName(@RequestParam String name) {
+        return ResponseEntity.ok(
+                productService.searchByName(name).stream()
+                        .map(ProductResponse::from)
+                        .toList()
+        );
     }
 
-    // ✔️ Kategoriye göre filtreleme
+    // ✔️ Kategoriye göre filtre → DTO liste
     @GetMapping("/filter")
-    public ResponseEntity<List<Product>> filterByCategory(@RequestParam String category) {
-        return ResponseEntity.ok(productService.filterByCategory(category));
+    public ResponseEntity<List<ProductResponse>> filterByCategory(@RequestParam String category) {
+        return ResponseEntity.ok(
+                productService.filterByCategory(category).stream()
+                        .map(ProductResponse::from)
+                        .toList()
+        );
     }
 
-    // ✔️ Fiyata göre artan sıralama
+    // ✔️ Fiyata göre artan sıralama → DTO liste
     @GetMapping("/sort/asc")
-    public ResponseEntity<List<Product>> sortByPriceAsc() {
-        return ResponseEntity.ok(productService.sortByPriceAsc());
+    public ResponseEntity<List<ProductResponse>> sortByPriceAsc() {
+        return ResponseEntity.ok(
+                productService.sortByPriceAsc().stream()
+                        .map(ProductResponse::from)
+                        .toList()
+        );
     }
 
-    // ✔️ Fiyata göre azalan sıralama
+    // ✔️ Fiyata göre azalan sıralama → DTO liste
     @GetMapping("/sort/desc")
-    public ResponseEntity<List<Product>> sortByPriceDesc() {
-        return ResponseEntity.ok(productService.sortByPriceDesc());
+    public ResponseEntity<List<ProductResponse>> sortByPriceDesc() {
+        return ResponseEntity.ok(
+                productService.sortByPriceDesc().stream()
+                        .map(ProductResponse::from)
+                        .toList()
+        );
     }
 }

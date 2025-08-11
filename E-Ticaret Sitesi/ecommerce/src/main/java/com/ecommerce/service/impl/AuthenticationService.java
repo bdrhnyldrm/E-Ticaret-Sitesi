@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class AuthenticationService {
             throw new RuntimeException("Email already exists");
         }
 
+        // Yeni kullanıcı her zaman USER rolü ile başlar
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -37,7 +40,12 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        return jwtUtil.generateToken(user.getEmail());
+        // Kullanıcının rollerini enum -> String olarak al
+        Set<String> roleNames = user.getRoles().stream()
+                .map(Enum::name)
+                .collect(Collectors.toSet());
+
+        return jwtUtil.generateToken(user.getEmail(), roleNames);
     }
 
     public String login(LoginRequest request) {
@@ -51,6 +59,11 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return jwtUtil.generateToken(user.getEmail());
+        // Veritabanındaki rollerini al
+        Set<String> roleNames = user.getRoles().stream()
+                .map(Enum::name)
+                .collect(Collectors.toSet());
+
+        return jwtUtil.generateToken(user.getEmail(), roleNames);
     }
 }
