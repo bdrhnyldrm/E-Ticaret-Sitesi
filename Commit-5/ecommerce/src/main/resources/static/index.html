@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Ana Sayfa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        /* Basit grid ve kart stili (istersen style.css'e taşı) */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 16px; padding: 16px; }
+        .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; background:#fff; display:flex; flex-direction:column; justify-content:space-between }
+        .card h3 { margin: 0 0 8px; font-size: 1.05rem; }
+        .card p { margin: 0 0 12px; color:#374151 }
+        .price { font-weight: 700; margin-bottom: 12px; }
+        .actions { display:flex; justify-content:flex-end }
+        .message { margin: 12px 16px; padding: 12px; border-radius: 6px; display:none; font-weight:bold; }
+        .message.success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+        .message.error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+<script src="js/auth-guard.js"></script>
+<script>requireAuth();</script>
+<header style="padding:12px 16px; background:#111827; color:#fff; display:flex; justify-content:space-between; align-items:center;">
+    <h1 style="margin:0; font-size:1.2rem;">Ürünler</h1>
+    <nav style="display:flex; gap:12px;">
+        <a href="cart.html" style="color:#93c5fd">🛒 Sepet</a>
+        <a href="#" onclick="logout()" style="color:#93c5fd">Çıkış</a>
+    </nav>
+</header>
+
+<!-- Filtre barı -->
+<section style="padding:12px 16px; display:flex; gap:12px; align-items:center;">
+  <label for="category-filter" style="font-weight:600;">Kategori:</label>
+  <select id="category-filter">
+    <option value="">Tümü</option>
+  </select>
+</section>
+
+<div id="message" class="message"></div>
+<main>
+    <div id="product-grid" class="grid"></div>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
