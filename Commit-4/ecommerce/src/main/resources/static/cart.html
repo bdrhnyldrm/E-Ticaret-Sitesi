@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sepet</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<script src="js/auth-guard.js"></script>
+<script>requireAuth();</script>
+<header>
+    <h1>Sepetim</h1>
+    <nav>
+        <a href="index.html">🏠 Ana Sayfa</a>
+        <a href="#" onclick="logout()">Çıkış</a>
+    </nav>
+</header>
+
+<main>
+    <div id="message" class="message"></div>
+    <div id="cart-items"></div>
+    <div id="cart-total" style="font-weight:bold; margin-top: 20px;"></div>
+    <button id="place-order-btn">Siparişi Tamamla</button>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+</body>
+</html>
