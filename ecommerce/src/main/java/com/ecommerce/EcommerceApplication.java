@@ -14,4 +14,4 @@ public class EcommerceApplication {
 		System.out.println("http://localhost:8080/product.html");
 	}
 
-}
+} //Gerekli güncellemeler yapıldı. Last changes done
