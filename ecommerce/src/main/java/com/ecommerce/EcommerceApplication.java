@@ -15,3 +15,4 @@ public class EcommerceApplication {
 	}
 
 } //Gerekli güncellemeler yapıldı. Last changes done
+//Bedirhan Yıldırım nasılsın bende iyim
