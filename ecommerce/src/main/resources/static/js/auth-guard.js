@@ -48,5 +48,6 @@ function hasRole(role) {
 
 function logout() {
   localStorage.removeItem('token');
+  localStorage.removeItem('userEmail');
   window.location.href = 'login.html';
 }

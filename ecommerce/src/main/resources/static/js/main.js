@@ -4,7 +4,17 @@ function imgUrl(url) {
   return url.startsWith('/') ? url : '/' + url;
 }
 
+function displayUserEmail() {
+  const userEmailElement = document.getElementById('userEmail');
+  const email = localStorage.getItem('userEmail');
+  if (email) {
+    userEmailElement.textContent = email;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  displayUserEmail();
+
   const grid = document.getElementById('product-grid');
   const filter = document.getElementById('category-filter');
 

@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const token = await login(email, password);
         localStorage.setItem('token', token);
+        localStorage.setItem('userEmail', email);  // E-posta bilgisini kaydediyoruz
 
         const payload = parseJwt(token);
         console.log("JWT payload:", payload); // Debug için
