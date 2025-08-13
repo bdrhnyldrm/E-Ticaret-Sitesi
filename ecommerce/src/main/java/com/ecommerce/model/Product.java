@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // <-- EKLENDİ
 
 @Entity
 @Table(name = "products")
@@ -40,6 +41,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties({"products"}) // category.products alanını JSON'a dahil etme
     private Category category;
 
     @PrePersist

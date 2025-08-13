@@ -2,6 +2,7 @@ package com.ecommerce.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore; // <-- EKLENDİ
 
 @Entity
 @Table(name = "cart_items")
@@ -21,5 +22,6 @@ public class CartItem {
     private Product product;
 
     @ManyToOne
+    @JsonIgnore // Kullanıcı bilgisi JSON'a dahil edilmez, döngü ve gereksiz veri önlenir
     private User user;
 }

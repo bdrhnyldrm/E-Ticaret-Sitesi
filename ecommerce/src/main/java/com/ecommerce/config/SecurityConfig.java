@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,6 +28,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+// CORS importları
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -62,8 +68,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                // CORS'u etkinleştir (aşağıdaki bean'i kullanır)
+                .cors(Customizer.withDefaults())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Preflight (OPTIONS) istekleri serbest (CORS için kritik)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         // Statik dosyalar ve TÜM .html sayfaları serbest
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico").permitAll()
@@ -85,6 +96,37 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // ==== CORS yapılandırması ====
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration c = new CorsConfiguration();
+
+        // Frontend origin'lerini buraya ekle (geliştirme örnekleri):
+        c.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://localhost:5500",
+                "http://127.0.0.1:5500"
+        ));
+        // Gerekirse wildcard:
+        // c.setAllowedOriginPatterns(List.of("*"));
+
+        // Tarayıcıdan gelecek metodlar
+        c.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // İzin verilen header'lar (Authorization kritik!)
+        c.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        // Cevapta görünsün isteyeceğin header'lar
+        c.setExposedHeaders(List.of("Authorization"));
+
+        // Eğer cookie göndereceksen (gerek yoksa false bırak)
+        c.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", c);
+        return source;
     }
 
     @Bean

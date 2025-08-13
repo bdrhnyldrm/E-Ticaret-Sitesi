@@ -2,8 +2,8 @@ package com.ecommerce.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "categories")
@@ -21,5 +21,6 @@ public class Category {
 
     // One category → many products
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonIgnore // JSON serileştirmede products alanını atla (döngüyü kırar)
     private List<Product> products;
 }
